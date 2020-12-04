@@ -1,0 +1,35 @@
+---
+# tasks file for test1
+
+#- name: yum test
+#  yum:
+#    name: "{{ packages }}"
+#  vars:
+#    packages:
+#      - rsync
+#      - bind-utils
+
+- name: fetch test
+  fetch:
+    src: log.repos
+    dest: ./
+    flat: yes
+
+#- name: synchronize test
+#  synchronize:
+#    mode: pull
+#    src: rsync://192.168.122.130/tmp/log.list
+#    dest: ~/
+#  delegate_to: localhost
+
+- name: synchronize pull test
+  synchronize:
+    mode: pull
+    src: rsync://192.168.122.130/tmp/log.list
+    dest: ~/
+
+- name: synchronize push test
+  synchronize:
+    src: /tmp/log.list
+    dest: rsync://192.168.122.1/tmp/log.list
+  delegate_to: "{{ inventory_hostname }}"
